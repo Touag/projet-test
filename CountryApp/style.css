@@ -1,0 +1,71 @@
+.filter-container {
+  text-align: center;
+  padding-bottom: 20px;
+}
+input {
+  margin: 20px auto;
+  border-radius: 5px;
+  display: block;
+  font-size: 1.4rem;
+  text-align: center;
+  transition: 0.2s;
+}
+input:focus {
+  border-radius: 30px;
+  background: rgb(238, 238, 238);
+}
+.range-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+input[type="range"] {
+  width: 250px;
+  margin: 0 10px 10px 0;
+}
+.range-container span {
+  font-size: 1.2rem;
+  transform: translateY(-3px);
+}
+
+button{
+  appearance: auto;
+    writing-mode: horizontal-tb !important;
+    border-radius: 5px;
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    line-height: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    box-sizing: border-box;
+    background-color: buttonface;
+}
+img{
+  height: 100px;
+  width: 160px;
+  object-fit: cover;
+}
+
+.countries-container{
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+
+}
+.card{
+  flex: 1 0 20% ;
+  background: rgba(0, 0, 0, 0.758);
+  margin: 5px;
+  color: whitesmoke;
+  padding: 20px;
+  border-radius: 20px;
+  font-family:"lucida" ;
+  min-width: 200px;
+}
