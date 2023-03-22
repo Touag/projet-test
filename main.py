@@ -1,175 +1,80 @@
-# LES FONCTIONS : PROJET QUESTIONNAIRE
-#
-# Question : Quelle est la capitale de la France ?
-# (a) Marseille
-# (b) Nice
-# (c) Paris
-# (d) Nantes
-#
-# Votre réponse :
-# Bonne réponse / Mauvaise réponse
+from pytube import YouTube
 
-# ...
-# Question : Quelle est la capitale de l'Italie ?
-# ...
-#
-# 4 questions
-"""
-définir les entité
 
-class question
+# verrifier que l'url commence par youtube
+# si ce n'est pas le cas print erreur
+def get_url_from_user():
+    base_youtube="https://www.youtube.com/" 
 
-titre
-choix
-bonne reponse
+    while True:
+        url=input("Copier-coller le liens http de la video youtube que vous voulez Download: ")
+        #autre méthode url[:len(base_youtube)]==base_youtube:
+        if url.lower().startswith(base_youtube):
+                break
+        print("ERREUR:Il faut obligatoirement mettre un lien youtube qui commence par https://www.youtube.com/....")
 
-methode:
-poser la question
-demander la reponse
-
-questionnaire
-liste de question
-methode
-lancé le questionnaire
-
-"""
-
-class Question:
-    def __init__(self,titre,choix,bonneReponse) :
-        self.titre=titre
-        self.choix=choix
-        self.bonneReponse=bonneReponse
+    return url
     
 
 
-    def poser_question(self):
-        # titre_question, r1, r2, r3, r4, choix_bonne_reponse
-        
-        print("QUESTION")
-        print("  " + self.titre)
-        for i in range(len(self.choix)):
-            print("  ", i+1, "-", self.choix[i])
 
-        print()
-        resultat_response_correcte = False
-        reponse_int =Question.demander_reponse_numerique_utilisateur(1, len(self.choix))
-    
-        if self.choix[reponse_int-1] == self.bonneReponse:
-            print("Bonne réponse")
-            resultat_response_correcte = True
+
+
+
+
+def ondownload_progress(stream, chunk,bytes_remaining):
+        bytes_dl=stream.filesize-bytes_remaining
+        percent=(bytes_dl*100/stream.filesize)
+        print("progression du téléchargement : ",int(percent),"%")
+        # on pose le int sur le percent pour suprimer les chiffre a virgule lors de l'affichage
+
+
+    # Demander le choix de la resolution
+
+def get_choice_from_user(streams):
+    print("")
+    print(" Vous avez choisi le titre : "+youtube_video.title)
+    print("")
+    print("Différente qualité de stream disponible:")
+    j=1
+    for stream in streams:
+        print(j,")",stream.resolution)
+        j+=1
+
+    while True:
+        choice=input(f"Quelle est votre choix ? (merci d'entrée un chiffre entre 1 et {len(streams)}) : ")
+        if choice=="":
+            print("Erreur:vous devez entrer  un nombre")
         else:
-            print("Mauvaise réponse")
-            
-        print()
-        return resultat_response_correcte
-
-    def demander_reponse_numerique_utilisateur(min, max):
-        
-
-        response_str = input("Votre réponse (entre " + str(min) + " et " + str(max) + ") :")
-        try:
-            reponse_int = int(response_str)
-            if min <= reponse_int <= max:
-                return reponse_int
-
-            print("ERREUR : Vous devez rentrer un nombre entre", min, "et", max)
-        except:
-            print("ERREUR : Veuillez rentrer uniquement des chiffres")
-        return Question.demander_reponse_numerique_utilisateur(min, max)
-
-        
-
-        
-
-"""
-    def poser_question(question):
-    # titre_question, r1, r2, r3, r4, choix_bonne_reponse
-    choix = question[1]
-    bonne_reponse = question[2]
-    print("QUESTION")
-    print("  " + question[0])
-    for i in range(len(choix)):
-        print("  ", i+1, "-", choix[i])
-
-    print()
-    resultat_response_correcte = False
-    reponse_int = demander_reponse_numerique_utlisateur(1, len(choix))
-    if choix[reponse_int-1].lower() == bonne_reponse.lower():
-        print("Bonne réponse")
-        resultat_response_correcte = True
-    else:
-        print("Mauvaise réponse")
-        
-    print()
-    return resultat_response_correcte"""
-   
+            try:
+                choice_int=int(choice)
+            except:
+                print("Erreur: Veuillez entrez un nombre correspondant à la résolution")
+            else:
+                if not 1<=choice_int<=len(streams):
+                    print(" vous devez entrez un nombre compris dans les chiffres proposer soit entre 1 et ",len(streams))
+                else:
+                    break
+    print("Vous avez selectionné la résolution suivante",streams[choice_int-1].resolution)
+    print("")
+    print("Le téléchargement va se lancer")
+    itag_select=streams[choice_int-1].itag
+    return itag_select
 
 
-'''
-    questionnaire[]
-        question
-            titre = "Quelle est la capitale de la France ?"
-            reponses = ("Marseille", "Nice", "Paris", "Nantes")
-            bonne_reponse = "Paris"
+"""---------Programme principale---------"""
 
-'''
-"""
-def demander_reponse_numerique_utlisateur(min, max):
-    reponse_str = input("Votre réponse (entre " + str(min) + " et " + str(max) + ") :")
-    try:
-        reponse_int = int(reponse_str)
-        if min <= reponse_int <= max:
-            return reponse_int
+"""url="https://www.youtube.com/watch?v=ws3WGmINlIg"""
+url=get_url_from_user()
 
-        print("ERREUR : Vous devez rentrer un nombre entre", min, "et", max)
-    except:
-        print("ERREUR : Veuillez rentrer uniquement des chiffres")
-    return demander_reponse_numerique_utlisateur(min, max)
+youtube_video=YouTube(url)
 
-def lancer_questionnaire(questionnaire):
-    score = 0
-    for question in questionnaire:
-        if poser_question(question):
-            score += 1
-    print("Score final :", score, "sur", len(questionnaire))
+youtube_video.register_on_progress_callback(ondownload_progress)
 
-questionnaire = (
-    ("Quelle est la capitale de la France ?", ("Marseille", "Nice", "Paris", "Nantes", "Lille"), "Paris"), 
-    ("Quelle est la capitale de l'Italie ?", ("Rome", "Venise", "Pise", "Florence"), "Rome"),
-    ("Quelle est la capitale de la Belgique ?", ("Anvers", "Bruxelles", "Bruges", "Liège"), "Bruxelles")
-                )"""
+streams=youtube_video.streams.filter(progressive=True)
 
+itag_select2=get_choice_from_user(streams)
 
-class Questionnaire:
-    def __init__(self,questions):
-        self.questions=questions
-
-
-    def lancer_questionnaire(self):
-        score = 0
-        for question in self.questions:
-            if question.poser_question():
-                score += 1
-        print("Score final :", score, "sur", len(self.questions))
-
-
-
-
-question=[
-    Question("Quelle est la capitale de la France ?", ("Marseille", "Nice", "Paris", "Nantes", "Lille"), "Paris"),
-    Question("Quelle est la capitale de l'Italie ?", ("Rome", "Venise", "Pise", "Florence"), "Rome"),
-    Question("Quelle est la capitale de la Belgique ?", ("Anvers", "Bruxelles", "Bruges", "Liège"), "Bruxelles")
-
-]
-
-questionnaire=Questionnaire(question)
-questionnaire.lancer_questionnaire()
-
-"""score=0
-for question in questionnaire:
-    question.poser_question()
-
-    if bonneReponse:
-            score += 1 
-    print("Score final :", score, "sur", len(questionnaire))"""
-
+stream = youtube_video.streams.get_by_itag(itag_select2)
+stream.download()
+print("Téléchargement fini! vous pouvez kiffer")
